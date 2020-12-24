@@ -41,7 +41,8 @@ class Plugin_Updater {
 	private $name = '';
 
 	/**
-	 * Plugin Slug
+	 * The slug of download_tag
+	 * It's better to keep them same with plugin slug
 	 *
 	 * @var $slug
 	 */
@@ -100,9 +101,9 @@ class Plugin_Updater {
 		$this->api_url      = trailingslashit( $_api_url );
 		$this->api_data     = $_api_data;
 		$this->name         = plugin_basename( $_plugin_file );
-		$this->slug         = basename( $_plugin_file, '.php' );
 		$this->version      = $_api_data['version'];
 		$this->download_tag = $_api_data['download_tag'];
+		$this->slug         = $_api_data['download_tag']; // the slug of download term
 		$this->wp_override  = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
 		$this->beta         = ! empty( $this->api_data['beta'] ) ? true : false;
 		$this->cache_key    = 'paddlepress_' . md5( serialize( $this->slug . $this->api_data['license_key'] . $this->beta ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
@@ -172,7 +173,6 @@ class Plugin_Updater {
 				'get_version',
 				array(
 					'download_tag' => $this->download_tag,
-					'slug'         => $this->slug,
 					'beta'         => $this->beta,
 					'license_url'  => $this->api_data['license_url'],
 				)
@@ -271,7 +271,6 @@ class Plugin_Updater {
 					'get_version',
 					array(
 						'download_tag' => $this->download_tag,
-						'slug'         => $this->slug,
 						'beta'         => $this->beta,
 						'license_url'  => $this->api_data['license_url'],
 					)
@@ -539,12 +538,8 @@ class Plugin_Updater {
 
 		$data = array_merge( $this->api_data, $_data );
 
-		if ( $data['slug'] !== $this->slug ) {
+		if ( $data['download_tag'] !== $this->slug ) {
 			return;
-		}
-
-		if ( trailingslashit( home_url() ) === $this->api_url ) {
-			return false; // Don't allow a plugin to ping itself
 		}
 
 		$api_params = array(
@@ -553,7 +548,6 @@ class Plugin_Updater {
 			'license_url'  => ! empty( $data['license_url'] ) ? $data['license_url'] : '',
 			'download_tag' => $this->download_tag,
 			'version'      => isset( $data['version'] ) ? $data['version'] : false,
-			'slug'         => $data['slug'],
 			'beta'         => ! empty( $data['beta'] ),
 		);
 

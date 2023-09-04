@@ -41,12 +41,19 @@ class Plugin_Updater {
 	private $name = '';
 
 	/**
-	 * The slug of download_tag
-	 * It's better to keep them same with plugin slug
+	 * Whether update from the beta version or not
 	 *
 	 * @var $slug
 	 */
-	private $slug = '';
+	private $beta;
+
+	/**
+	 * Whether update from the beta version or not
+	 *
+	 * @var $slug
+	 */
+	private $beta;
+
 
 	/**
 	 * Current version of plugin

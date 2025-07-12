@@ -325,11 +325,11 @@ class Plugin_Updater {
 				$no_update->slug        = $this->slug;
 				$no_update->plugin      = $this->name;
 				$no_update->new_version = $version_info->new_version;
-				$no_update->url         = $version_info->homepage;
 				$no_update->package     = $version_info->package;
 				$no_update->icons       = $version_info->icons;
 				$no_update->banners     = $version_info->banners;
 				$no_update->banners_rtl = array();
+				$no_update->url         = isset( $version_info->homepage ) ? $version_info->homepage : '';
 			}
 
 			$update_cache->last_checked           = time();
